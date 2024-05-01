@@ -1,0 +1,108 @@
+@page "/stores"
+
+<PageTitle>Stores</PageTitle>
+<RadzenStack>
+    <RadzenRow AlignItems="AlignItems.Center">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenText Text="Stores" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenTextBox Placeholder="Search ..." style="display: block; width: 100%" @oninput="@Search" aria-label="Search by all string columns" />
+    <RadzenRow>
+      <RadzenColumn SizeMD=8>
+     <RadzenCard style="height: 100%">
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
+            Data="@stores" LoadData="@Grid0LoadData" Count="@count" TItem="Certify.Server.Models.CertifyApp.Store" RowSelect="@EditRow">
+            <Columns>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="Title" Title="Title">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="Address" Title="Address">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="Contact1" Title="Contact1">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="Contact2" Title="Contact2">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="Email" Title="Email">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="User.Username" Title="User">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="CreatedOn" Title="Created On">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="User1.Username" Title="User1">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="ModifiedOn" Title="Modified On">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Property="Status" Title="Status">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Store" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="store">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, store)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+
+        </RadzenDataGrid>
+    </RadzenCard>
+
+    </RadzenColumn>
+        <RadzenColumn SizeMD=4>
+        <RadzenCard style="height: 100%;margin-top:0px;">
+            <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Store</RadzenAlert>
+            <RadzenTemplateForm TItem="Certify.Server.Models.CertifyApp.Store" Data="@store" Visible="@(store != null)" Submit="@FormSubmit">
+              <RadzenStack>
+                <RadzenFormField Text="Title" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@store.Title" Name="Title" />
+                      </ChildContent>    
+                      <Helper>
+                        <RadzenRequiredValidator Component="Title" Text="Title is required" />
+                      </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Address" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@store.Address" Name="Address" />
+                  </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Contact1" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@store.Contact1" Name="Contact1" />
+                      </ChildContent>    
+                      <Helper>
+                        <RadzenRequiredValidator Component="Contact1" Text="Contact1 is required" />
+                      </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Contact2" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@store.Contact2" Name="Contact2" />
+                  </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Email" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@store.Email" Name="Email" />
+                  </ChildContent>
+                </RadzenFormField>
+                <RadzenRow style="margin-bottom: 1rem">
+                    <RadzenColumn SizeMD="3">
+                        <RadzenLabel Text="Status" Component="Status" style="width: 100%" />
+                    </RadzenColumn>
+                    <RadzenColumn SizeMD="9">
+                        <RadzenCheckBox @bind-Value="@store.Status" Name="Status" />
+                    </RadzenColumn>
+                </RadzenRow>
+              </RadzenStack>
+              <RadzenStack style="margin-top:1rem;" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick" Visible=false />
+              </RadzenStack>
+            </RadzenTemplateForm>
+        </RadzenCard>
+        </RadzenColumn>  </RadzenRow>
+</RadzenStack>

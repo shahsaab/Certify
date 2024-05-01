@@ -1,0 +1,52 @@
+@layout LoginLayoutLayout
+@page "/login"
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject DialogService DialogService
+@inject ContextMenuService ContextMenuService
+@inject TooltipService TooltipService
+@inject NotificationService NotificationService
+
+<PageTitle>Login</PageTitle>
+<div class="login-page">
+    <RadzenForm Data="@loginData" Submit="@HandleSubmit">
+        <RadzenTextBox @bind-Value="@loginData.Username" Placeholder="Username" />
+        <RadzenPassword @bind-Value="@loginData.Password" Placeholder="Password" />
+        <RadzenButton Text="Login" Click="@HandleSubmit" Style="--md3-color-primary: #6200ea;" />
+    </RadzenForm>
+</div>
+@code {
+
+[Inject]
+public CustomService CustomService { get; set; }
+protected Certify.Server.Models.CertifyApp.User user;
+
+private LoginData loginData = new();
+
+    private async Task HandleSubmit()
+    {
+        // Add your authentication logic here
+        if (await AuthenticateUser(loginData.Username, loginData.Password))
+        {
+            // Handle successful login
+            NavigationManager.NavigateTo("/home");
+        }
+        else
+        {
+            // Handle login failure
+            // You can show an error message to the user
+        }
+    }
+
+    private async Task<bool> AuthenticateUser(string username, string password)
+    {
+        user = await CustomService.Authenticate(username, password);
+        return user != null;
+    }
+
+    public class LoginData
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+}

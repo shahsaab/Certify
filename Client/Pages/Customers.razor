@@ -1,0 +1,98 @@
+@page "/customers"
+
+<PageTitle>Customers</PageTitle>
+<RadzenStack>
+    <RadzenRow AlignItems="AlignItems.Center">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenText Text="Customers" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenTextBox Placeholder="Search ..." style="display: block; width: 100%" @oninput="@Search" aria-label="Search by all string columns" />
+    <RadzenRow>
+      <RadzenColumn SizeMD=8>
+     <RadzenCard style="height: 100%">
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
+            Data="@customers" LoadData="@Grid0LoadData" Count="@count" TItem="Certify.Server.Models.CertifyApp.Customer" RowSelect="@EditRow">
+            <Columns>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="Name" Title="Name">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="Contact" Title="Contact">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="NIC" Title="NIC">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="Address" Title="Address">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="Email" Title="Email">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="User.Username" Title="User">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="CreatedOn" Title="Created On">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="User1.Username" Title="User1">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Property="ModifiedOn" Title="Modified On">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.Customer" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="customer">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, customer)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+
+        </RadzenDataGrid>
+    </RadzenCard>
+
+    </RadzenColumn>
+        <RadzenColumn SizeMD=4>
+        <RadzenCard style="height: 100%;margin-top:0px;">
+            <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Customer</RadzenAlert>
+            <RadzenTemplateForm TItem="Certify.Server.Models.CertifyApp.Customer" Data="@customer" Visible="@(customer != null)" Submit="@FormSubmit">
+              <RadzenStack>
+                <RadzenFormField Text="Name" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@customer.Name" Name="Name" />
+                      </ChildContent>    
+                      <Helper>
+                        <RadzenRequiredValidator Component="Name" Text="Name is required" />
+                      </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Contact" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@customer.Contact" Name="Contact" />
+                      </ChildContent>    
+                      <Helper>
+                        <RadzenRequiredValidator Component="Contact" Text="Contact is required" />
+                      </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="NIC" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@customer.NIC" Name="NIC" />
+                  </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Address" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@customer.Address" Name="Address" />
+                  </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Email" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenTextBox style="display: block; width: 100%" @bind-Value="@customer.Email" Name="Email" />
+                  </ChildContent>
+                </RadzenFormField>
+              </RadzenStack>
+              <RadzenStack style="margin-top:1rem;" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick" Visible=false />
+              </RadzenStack>
+            </RadzenTemplateForm>
+        </RadzenCard>
+        </RadzenColumn>  </RadzenRow>
+</RadzenStack>

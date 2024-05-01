@@ -1,0 +1,67 @@
+@page "/role-menu-mappings"
+
+<PageTitle>RoleMenuMappings</PageTitle>
+<RadzenStack>
+    <RadzenRow AlignItems="AlignItems.Center">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenText Text="RoleMenuMappings" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenTextBox Placeholder="Search ..." style="display: block; width: 100%" @oninput="@Search" aria-label="Search by all string columns" />
+    <RadzenRow>
+      <RadzenColumn SizeMD=6>
+     <RadzenCard style="height: 100%">
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
+            Data="@roleMenuMappings" LoadData="@Grid0LoadData" Count="@count" TItem="Certify.Server.Models.CertifyApp.RoleMenuMapping" RowSelect="@EditRow">
+            <Columns>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.RoleMenuMapping" Property="Role.Title" Title="Role">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.RoleMenuMapping" Property="Menu.Title" Title="Menu">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Certify.Server.Models.CertifyApp.RoleMenuMapping" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="roleMenuMapping">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, roleMenuMapping)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+
+        </RadzenDataGrid>
+    </RadzenCard>
+
+    </RadzenColumn>
+        <RadzenColumn SizeMD=6>
+        <RadzenCard style="height: 100%;margin-top:0px;">
+            <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save RoleMenuMapping</RadzenAlert>
+            <RadzenTemplateForm TItem="Certify.Server.Models.CertifyApp.RoleMenuMapping" Data="@roleMenuMapping" Visible="@(roleMenuMapping != null)" Submit="@FormSubmit">
+              <RadzenStack>
+                <RadzenFormField Text="Role" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenDropDown Data="@rolesForRoleId" TextProperty="Title" ValueProperty="Id" AllowClear=true
+                              style="display: block; width: 100%" @bind-Value="@roleMenuMapping.RoleId" Name="RoleId"
+                             Count=@rolesForRoleIdCount LoadData=@rolesForRoleIdLoadData />
+                  </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Menu" Variant="Variant.Outlined">
+                      <ChildContent>
+                        <RadzenDropDown Data="@menusForMenuId" TextProperty="Title" ValueProperty="Id" AllowClear=true
+                              style="display: block; width: 100%" @bind-Value="@roleMenuMapping.MenuId" Name="MenuId"
+                             Count=@menusForMenuIdCount LoadData=@menusForMenuIdLoadData />
+                  </ChildContent>
+                </RadzenFormField>
+              </RadzenStack>
+              <RadzenStack style="margin-top:1rem;" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick" Visible=false />
+              </RadzenStack>
+            </RadzenTemplateForm>
+        </RadzenCard>
+        </RadzenColumn>  </RadzenRow>
+</RadzenStack>
